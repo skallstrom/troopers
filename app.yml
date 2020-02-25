@@ -3,25 +3,25 @@ kind: Service
 metadata:
   annotations:
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
-  name: demoapp
+  name: troopers
   labels:
-    app: demoapp
+    app: troopers
 spec:
   type: NodePort
   ports:
   - port: 5000
-    name: demoapp
+    name: troopers
     targetPort: 5000
     nodePort: 30100
   selector:
-    app: demoapp
+    app: troopers
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: demoapp
-  name: demoapp
+    app: troopers
+  name: troopers
 spec:
   replicas: 1
   strategy:
@@ -32,10 +32,10 @@ spec:
   template:
     metadata:
       labels:
-        app: demoapp
+        app: troopers
     spec:
       containers:
-      - name: demoapp
+      - name: troopers
         image: $K8S_REGISTRY/troopers:latest
         imagePullPolicy: Always
         ports:
