@@ -16,7 +16,7 @@ spec:
   selector:
     app: troopers
 ---
-apiVersion: extensions/v1beta1
+apiVersion: extensions/v1
 kind: Deployment
 metadata:
   labels:
