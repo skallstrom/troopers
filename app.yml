@@ -24,6 +24,9 @@ metadata:
   name: troopers
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: troopers
   strategy:
     type: RollingUpdate
     rollingUpdate:
