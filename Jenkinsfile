@@ -15,6 +15,36 @@ node('jenkins-jenkins-slave') {
     parallel (
       "Test": {
         echo 'All functional tests passed'
+      },
+      "Check Image (pre-Registry)": {
+        smartcheckScan([
+          imageName: "${REPOSITORY}:$BUILD_NUMBER",
+          smartcheckHost: "${DSSC_SERVICE}",
+          smartcheckCredentialsId: "smartcheck-auth",
+          insecureSkipTLSVerify: true,
+          insecureSkipRegistryTLSVerify: true,
+          preregistryScan: true,
+          preregistryHost: "${DSSC_REGISTRY}",
+          preregistryCredentialsId: "preregistry-auth",
+          findingsThreshold: new groovy.json.JsonBuilder([
+            malware: 0,
+            vulnerabilities: [
+              defcon1: 0,
+              critical: 0,
+              high: 0,
+            ],
+            contents: [
+              defcon1: 0,
+              critical: 0,
+              high: 0,
+            ],
+            checklists: [
+              defcon1: 0,
+              critical: 0,
+              high: 0,
+            ],
+          ]).toString(),
+        ])
       }
     )
     stage('Push Image to Registry') {
