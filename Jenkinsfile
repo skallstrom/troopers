@@ -45,9 +45,10 @@ node('jenkins-jenkins-slave') {
         //     ],
         //   ]).toString(),
         // ])
-        script {
-          sh 'pwd && docker run --mount type=bind,source="$(pwd)",target=/usr/src/app/report mawinkler/scan-report "${REPOSITORY}" "${BUILD_NUMBER}"'
-        }
+        docker.image('mawinkler/scan-report').withRun('--mount type=bind,source="$(pwd)",target=/usr/src/app/report')
+        // script {
+        //   sh 'docker run --mount type=bind,source="$(pwd)",target=/usr/src/app/report mawinkler/scan-report "${REPOSITORY}" "${BUILD_NUMBER}"'
+        // }
       }
     )
     post {
