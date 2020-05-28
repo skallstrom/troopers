@@ -45,7 +45,9 @@ node('jenkins-jenkins-slave') {
             ],
           ]).toString(),
         ])
-        docker run --mount type=bind,source="$(pwd)",target=/usr/src/app/report scan-report "${REPOSITORY}" "${BUILD_NUMBER}"
+        script {
+          docker run --mount type=bind,source="$(pwd)",target=/usr/src/app/report scan-report "${REPOSITORY}" "${BUILD_NUMBER}"
+        }
       }
     )
     post {
