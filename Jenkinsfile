@@ -7,45 +7,48 @@ node('jenkins-jenkins-slave') {
         git (url: "${scm.userRemoteConfigs[0].url}", credentialsId: "github-auth")
       }
     }
-    // stage('Build Image') {
-    //   script {
-    //     dbuild = docker.build("${REPOSITORY}:$BUILD_NUMBER")
-    //   }
-    // }
-    // parallel (
-    //   "Test": {
-    //     echo 'All functional tests passed'
-    //   },
-    //   "Check Image (pre-Registry)": {
-    //     try {
-    //       smartcheckScan([
-    //         imageName: "${REPOSITORY}:${BUILD_NUMBER}",
-    //         smartcheckHost: "${DSSC_SERVICE}",
-    //         smartcheckCredentialsId: "smartcheck-auth",
-    //         insecureSkipTLSVerify: true,
-    //         insecureSkipRegistryTLSVerify: true,
-    //         preregistryScan: true,
-    //         preregistryHost: "${DSSC_REGISTRY}",
-    //         preregistryCredentialsId: "preregistry-auth",
-    //         findingsThreshold: new groovy.json.JsonBuilder([
-    //           malware: 0,
-    //           vulnerabilities: [
-    //             defcon1: 0,
-    //             critical: 0,
-    //             high: 0,
-    //           ],
-    //           contents: [
-    //             defcon1: 0,
-    //             critical: 0,
-    //             high: 0,
-    //           ],
-    //           checklists: [
-    //             defcon1: 0,
-    //             critical: 0,
-    //             high: 0,
-    //           ],
-    //         ]).toString(),
-    //       ])
+    stage('Build Image') {
+      script {
+        dbuild = docker.build("${REPOSITORY}:$BUILD_NUMBER")
+      }
+    }
+    parallel (
+      "Test": {
+        echo 'All functional tests passed'
+      },
+      "Check Image (pre-Registry)": {
+        // try {
+          smartcheckScan([
+            imageName: "${REPOSITORY}:${BUILD_NUMBER}",
+            smartcheckHost: "${DSSC_SERVICE}",
+            smartcheckCredentialsId: "smartcheck-auth",
+            insecureSkipTLSVerify: true,
+            insecureSkipRegistryTLSVerify: true,
+            preregistryScan: true,
+            preregistryHost: "${DSSC_REGISTRY}",
+            preregistryCredentialsId: "preregistry-auth",
+            findingsThreshold: new groovy.json.JsonBuilder([
+              malware: 0,
+              vulnerabilities: [
+                defcon1: 0,
+                critical: 0,
+                high: 0,
+              ],
+              contents: [
+                defcon1: 0,
+                critical: 0,
+                high: 0,
+              ],
+              checklists: [
+                defcon1: 0,
+                critical: 0,
+                high: 0,
+              ],
+            ]).toString(),
+          ])
+        }
+
+    )
     //     } catch(e) {
     //       script {
     //         docker.image('mawinkler/scan-report').inside {
