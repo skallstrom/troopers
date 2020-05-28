@@ -2,11 +2,11 @@ import groovy.json.JsonBuilder
 
 node('jenkins-jenkins-slave') {
   withEnv(['REPOSITORY=troopers']) {
-    // stage('Pull Image from Git') {
-    //   script {
-    //     git (url: "${scm.userRemoteConfigs[0].url}", credentialsId: "github-auth")
-    //   }
-    // }
+    stage('Pull Image from Git') {
+      script {
+        git (url: "${scm.userRemoteConfigs[0].url}", credentialsId: "github-auth")
+      }
+    }
     // stage('Build Image') {
     //   script {
     //     dbuild = docker.build("${REPOSITORY}:$BUILD_NUMBER")
