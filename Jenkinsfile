@@ -50,13 +50,9 @@ node('jenkins-jenkins-slave') {
         // script {
         //   sh 'docker run --mount type=bind,source="$(pwd)",target=/usr/src/app/report mawinkler/scan-report "${REPOSITORY}" "${BUILD_NUMBER}"'
         // }
-      }
-    )
-    post {
-      always {
         archiveArtifacts artifacts: '*.pdf'
       }
-    }
+    )
 
     stage('Push Image to Registry') {
       script {
