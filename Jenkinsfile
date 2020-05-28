@@ -85,10 +85,10 @@ node('jenkins-jenkins-slave') {
           script {
             sh 'pwd'
             docker.image('mawinkler/scan-report').pull()
-            docker.image('mawinkler/scan-report').inside("--mount type=bind,source=\$(pwd),target=/usr/src/app/report --entrypoint=''") {
-              sh 'cd /usr/src/app && ls -l && python scan-report.py "${REPOSITORY}" "${BUILD_NUMBER}"'
+            docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
+              sh 'ls -l && python scan-report.py "${REPOSITORY}" "${BUILD_NUMBER}"'
+              archiveArtifacts artifacts: 'report/*.pdf'
             }
-            archiveArtifacts artifacts: '*.pdf'
           }
         }
         //.withRun('--mount type=bind,source="$(pwd)",target=/usr/src/app/report')
