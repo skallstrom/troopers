@@ -86,7 +86,9 @@ node('jenkins-jenkins-slave') {
             sh 'pwd'
             docker.image('mawinkler/scan-report').pull()
             docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
-              sh 'ls -l && pwd && python /usr/src/app/scan-report.py "${REPOSITORY}" "${BUILD_NUMBER}"'
+              sh 'env'
+              sh 'pwd'
+              sh 'python /usr/src/app/scan-report.py --config_path /usr/src/app --name "${REPOSITORY}" --image_tag "${BUILD_NUMBER}"'
               archiveArtifacts artifacts: 'report/*.pdf'
             }
           }
