@@ -18,7 +18,7 @@ node('jenkins-jenkins-slave') {
       },
       "Check Image (pre-Registry)": {
         smartcheckScan([
-          imageName: "${REPOSITORY}:$BUILD_NUMBER",
+          imageName: "${REPOSITORY}:${BUILD_NUMBER}",
           smartcheckHost: "${DSSC_SERVICE}",
           smartcheckCredentialsId: "smartcheck-auth",
           insecureSkipTLSVerify: true,
@@ -45,8 +45,14 @@ node('jenkins-jenkins-slave') {
             ],
           ]).toString(),
         ])
+        docker run --mount type=bind,source="$(pwd)",target=/usr/src/app/report scan-report "${REPOSITORY}" "${BUILD_NUMBER}"
       }
     )
+    post {
+      always {
+        archiveArtifacts artifacts: '*.pdf'
+      }
+    }
 
     stage('Push Image to Registry') {
       script {
