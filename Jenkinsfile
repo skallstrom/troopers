@@ -83,8 +83,9 @@ node('jenkins-jenkins-slave') {
           ])
         } catch(e) {
           script {
+            sh 'pwd'
             docker.image('mawinkler/scan-report').pull()
-            docker.image('mawinkler/scan-report').inside("--mount type=bind,source=${HOME},target=/usr/src/app/report --entrypoint=''") {
+            docker.image('mawinkler/scan-report').inside("--mount type=bind,source=$(pwd),target=/usr/src/app/report --entrypoint=''") {
               sh 'cd /usr/src/app && ls -l && python scan-report.py "${REPOSITORY}" "${BUILD_NUMBER}"'
             }
             archiveArtifacts artifacts: '*.pdf'
