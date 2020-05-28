@@ -89,8 +89,8 @@ node('jenkins-jenkins-slave') {
               sh 'env'
               sh 'echo "${REPOSITORY}"'
               sh 'echo "${BUILD_NUMBER}"'
-              sh 'echo "${env.WORKSPACE}"'
-              sh 'python /usr/src/app/scan-report.py --config_path /usr/src/app --name "${REPOSITORY}" --image_tag "${BUILD_NUMBER}" --out_path "${env.WORKSPACE}"'
+              sh 'echo "${WORKSPACE}"'
+              sh 'python /usr/src/app/scan-report.py --config_path /usr/src/app --name "${REPOSITORY}" --image_tag "${BUILD_NUMBER}" --out_path "${WORKSPACE}"'
               archiveArtifacts artifacts: 'report_*.pdf'
             }
           }
