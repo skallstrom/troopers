@@ -64,7 +64,7 @@ node('jenkins-jenkins-slave') {
     stage('Report') {
       script {
         docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
-          sh 'ls'
+          sh 'python scan-report.py'
         }
       }
       archiveArtifacts artifacts: '*.pdf'
