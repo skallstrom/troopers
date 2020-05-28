@@ -46,7 +46,7 @@ node('jenkins-jenkins-slave') {
         //   ]).toString(),
         // ])
         docker.image('mawinkler/scan-report').inside {
-          sh 'python /usr/src/app/scan-report.py "${REPOSITORY}" "${BUILD_NUMBER}"'
+          sh 'python scan-report.py'
         }
         //.withRun('--mount type=bind,source="$(pwd)",target=/usr/src/app/report')
         // script {
