@@ -48,11 +48,10 @@ node('jenkins-jenkins-slave') {
           ])
         } catch(e) {
           script {
-            echo "${DSSC_SERVICE}"
             sh 'env'
             docker.image('mawinkler/scan-report').pull()
             docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
-              sh 'python /usr/src/app/scan-report.py --config_path /usr/src/app --name "${REPOSITORY}" --image_tag "${BUILD_NUMBER}" --out_path "${WORKSPACE}" --service "${WORKSPACE}"'
+              sh 'python /usr/src/app/scan-report.py --config_path /usr/src/app --name "${REPOSITORY}" --image_tag "${BUILD_NUMBER}" --out_path "${WORKSPACE}"'
               archiveArtifacts artifacts: 'report_*.pdf'
             }
             error('Issues in image found')
