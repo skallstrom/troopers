@@ -48,6 +48,7 @@ node('jenkins-jenkins-slave') {
           ])
         } catch(e) {
           script {
+            echo '${DSSC_SERVICE}'
             docker.image('mawinkler/scan-report').pull()
             docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
               sh 'python /usr/src/app/scan-report.py --config_path /usr/src/app --name "${REPOSITORY}" --image_tag "${BUILD_NUMBER}" --out_path "${WORKSPACE}" --service "https://${DSSC_SERVICE}"'
