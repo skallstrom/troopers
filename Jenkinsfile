@@ -52,7 +52,7 @@ node('jenkins-jenkins-slave') {
             sh 'env'
             docker.image('mawinkler/scan-report').pull()
             docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
-              sh 'python /usr/src/app/scan-report.py --config_path /usr/src/app --name "${REPOSITORY}" --image_tag "${BUILD_NUMBER}" --out_path "${WORKSPACE}" --service "${DSSC_SERVICE}"'
+              sh 'python /usr/src/app/scan-report.py --config_path /usr/src/app --name "${REPOSITORY}" --image_tag "${BUILD_NUMBER}" --out_path "${WORKSPACE}" --service "10.0.2.126:30010"'
               archiveArtifacts artifacts: 'report_*.pdf'
             }
             error('Issues in image found')
