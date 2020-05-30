@@ -52,10 +52,9 @@ node('jenkins-jenkins-slave') {
           // }
           withCredentials([
             credentialsId: 'smartcheck-auth',
-            usernameVariable: "SMARTCHECK_AUTH_CREDS_USR",
-            passwordVariable: "SMARTCHECK_AUTH_CREDS_PSW"
+            variable: "SMARTCHECK_AUTH_CREDS"
           ]) { script {
-            SMARTCHECK_AUTH_CREDS = credentials('smartcheck-auth')
+            // SMARTCHECK_AUTH_CREDS = credentials('smartcheck-auth')
             sh 'env'
             docker.image('mawinkler/scan-report').pull()
             docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
