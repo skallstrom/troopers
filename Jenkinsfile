@@ -62,7 +62,7 @@ node('jenkins-jenkins-slave') {
           ]) { script {
             docker.image('mawinkler/scan-report').pull()
             docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
-              sh """#!/bin/bash
+              sh """
                 python /usr/src/app/scan-report.py \
                   --config_path "/usr/src/app" \
                   --name "${REPOSITORY}" \
