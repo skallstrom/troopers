@@ -68,10 +68,11 @@ node('jenkins-jenkins-slave') {
             docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
               sh '''#!/bin/bash
                 echo "---"
+                env
                 echo "${DSSC_SERVICE}"
                 echo "${DSSC_REGISTRY}"
-                // echo "${dssc_service[0]}"
-                // echo "${dssc_service[1]}"
+                # echo "${dssc_service[0]}"
+                # echo "${dssc_service[1]}"
                 echo "---"
                 python /usr/src/app/scan-report.py \
                   --config_path "/usr/src/app" \
