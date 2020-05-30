@@ -60,11 +60,11 @@ node('jenkins-jenkins-slave') {
               passwordVariable: 'SMARTCHECK_AUTH_CREDS_PSW'
             )
           ]) { script {
-            // SMARTCHECK_AUTH_CREDS = credentials('smartcheck-auth')
             sh 'env'
             docker.image('mawinkler/scan-report').pull()
             docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
               sh '''
+                echo "${DSSC_SERVICE}"
                 python /usr/src/app/scan-report.py \
                   --config_path "/usr/src/app" \
                   --name "${REPOSITORY}" \
