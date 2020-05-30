@@ -63,17 +63,18 @@ node('jenkins-jenkins-slave') {
             sh 'env'
             echo "${DSSC_SERVICE}"
             echo "${DSSC_REGISTRY}"
+            def service = ['10.0.2.126', '30010']
             docker.image('mawinkler/scan-report').pull()
             docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
               sh '''
                 echo "${DSSC_SERVICE}"
-                echo "${DSSC_REGISTRY}"
+                echo "${service[0]}:${service[1]}"
                 python /usr/src/app/scan-report.py \
                   --config_path "/usr/src/app" \
                   --name "${REPOSITORY}" \
                   --image_tag "1" \
                   --out_path "${WORKSPACE}" \
-                  --service "${DSSC_SERVICE}" \
+                  --service "${service[0]}:${service[1]}" \
                   --username "${SMARTCHECK_AUTH_CREDS_USR}" \
                   --password "${SMARTCHECK_AUTH_CREDS_PSW}"
               '''
