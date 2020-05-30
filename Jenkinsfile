@@ -66,7 +66,7 @@ node('jenkins-jenkins-slave') {
             // def dssc_service = ['10.0.2.126', '30010']
             docker.image('mawinkler/scan-report').pull()
             docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
-              sh '''#!/bin/bash
+              sh """#!/bin/bash
                 echo "---"
                 env
                 echo "${DSSC_SERVICE}"
@@ -82,7 +82,7 @@ node('jenkins-jenkins-slave') {
                   --service "${DSSC_SERVICE}" \
                   --username "${SMARTCHECK_AUTH_CREDS_USR}" \
                   --password "${SMARTCHECK_AUTH_CREDS_PSW}"
-              '''
+              """
               archiveArtifacts artifacts: 'report_*.pdf'
             }
             error('Issues in image found')
