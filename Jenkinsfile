@@ -50,8 +50,15 @@ node('jenkins-jenkins-slave') {
           // environment {
           //   SMARTCHECK_AUTH_CREDS = credentials('smartcheck-auth')
           // }
+
+          // ${BUILD_NUMBER}
+
           withCredentials([
-            usernamePassword(credentialsId: 'smartcheck-auth', usernameVariable: 'SMARTCHECK_AUTH_CREDS_USR', passwordVariable: 'SMARTCHECK_AUTH_CREDS_PSW')
+            usernamePassword(
+              credentialsId: 'smartcheck-auth',
+              usernameVariable: 'SMARTCHECK_AUTH_CREDS_USR',
+              passwordVariable: 'SMARTCHECK_AUTH_CREDS_PSW'
+            )
           ]) { script {
             // SMARTCHECK_AUTH_CREDS = credentials('smartcheck-auth')
             sh 'env'
@@ -61,7 +68,7 @@ node('jenkins-jenkins-slave') {
                 python /usr/src/app/scan-report.py \
                   --config_path "/usr/src/app" \
                   --name "${REPOSITORY}" \
-                  --image_tag "${BUILD_NUMBER}" \
+                  --image_tag "1" \
                   --out_path "${WORKSPACE}" \
                   --username "${SMARTCHECK_AUTH_CREDS_USR}" \
                   --password "${SMARTCHECK_AUTH_CREDS_PSW}"
