@@ -17,6 +17,9 @@ node('jenkins-jenkins-slave') {
         echo 'All functional tests passed'
       },
       "Check Image (pre-Registry)": {
+        environment {
+          SMARTCHECK_AUTH_CREDS = credentials('smartcheck-auth')
+        }
         try {
           smartcheckScan([
             imageName: "${REPOSITORY}:${BUILD_NUMBER}REMOVE_ME",
@@ -47,16 +50,14 @@ node('jenkins-jenkins-slave') {
             ]).toString(),
           ])
         } catch(e) {
-          environment {
-            SMARTCHECK_AUTH_CREDS = credentials('smartcheck-auth')
-          }
+
           script {
             sh 'env'
             docker.image('mawinkler/scan-report').pull()
             docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
               sh '''
                 python /usr/src/app/scan-report.py \
-                  --config_path /usr/src/app \
+                  --config_path "/usr/src/app" \
                   --name "${REPOSITORY}" \
                   --image_tag "${BUILD_NUMBER}" \
                   --out_path "${WORKSPACE}" \
