@@ -60,7 +60,7 @@ node('jenkins-jenkins-slave') {
                   --name "${REPOSITORY}" \
                   --image_tag "${BUILD_NUMBER}" \
                   --out_path "${WORKSPACE}" \
-                  --service "\\${DSSC_SERVICE}"
+                  --service "\\${DSSC_SERVICE}" \
                   --username "${SMARTCHECK_AUTH_CREDS_USR}" \
                   --password "${SMARTCHECK_AUTH_CREDS_PSW}"
               '''
