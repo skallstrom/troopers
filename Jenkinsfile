@@ -19,7 +19,7 @@ node('jenkins-jenkins-slave') {
       "Check Image (pre-Registry)": {
         try {
           smartcheckScan([
-            imageName: "${REPOSITORY}:${BUILD_NUMBER}REMOVE_ME",
+            imageName: "${REPOSITORY}:${BUILD_NUMBER}",
             smartcheckHost: "${DSSC_SERVICE}",
             smartcheckCredentialsId: "smartcheck-auth",
             insecureSkipTLSVerify: true,
@@ -47,12 +47,6 @@ node('jenkins-jenkins-slave') {
             ]).toString(),
           ])
         } catch(e) {
-          // environment {
-          //   SMARTCHECK_AUTH_CREDS = credentials('smartcheck-auth')
-          // }
-
-          // ${BUILD_NUMBER}
-
           withCredentials([
             usernamePassword(
               credentialsId: 'smartcheck-auth',
@@ -66,7 +60,7 @@ node('jenkins-jenkins-slave') {
                 python /usr/src/app/scan-report.py \
                   --config_path "/usr/src/app" \
                   --name "${REPOSITORY}" \
-                  --image_tag "1" \
+                  --image_tag "${BUILD_NUMBER}" \
                   --out_path "${WORKSPACE}" \
                   --service "${DSSC_SERVICE}" \
                   --username "${SMARTCHECK_AUTH_CREDS_USR}" \
