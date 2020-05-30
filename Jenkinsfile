@@ -51,8 +51,7 @@ node('jenkins-jenkins-slave') {
           //   SMARTCHECK_AUTH_CREDS = credentials('smartcheck-auth')
           // }
           withCredentials([
-            credentialsId: 'smartcheck-auth',
-            variable: "SMARTCHECK_AUTH_CREDS"
+            usernamePassword(credentialsId: 'smartcheck-auth', usernameVariable: 'SMARTCHECK_AUTH_CREDS_USR', passwordVariable: 'SMARTCHECK_AUTH_CREDS_PSW')
           ]) { script {
             // SMARTCHECK_AUTH_CREDS = credentials('smartcheck-auth')
             sh 'env'
