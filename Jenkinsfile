@@ -66,7 +66,9 @@ node('jenkins-jenkins-slave') {
             def dssc_service = ['10.0.2.126', '30010']
             docker.image('mawinkler/scan-report').pull()
             docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
-              sh '''
+              sh '''#!/bin/bash
+                echo "${DSSC_SERVICE}"
+                echo "${DSSC_REGISTRY}"
                 echo "${dssc_service[0]}"
                 echo "${dssc_service[1]}"
                 python /usr/src/app/scan-report.py \
