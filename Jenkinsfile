@@ -50,7 +50,11 @@ node('jenkins-jenkins-slave') {
           // environment {
           //   SMARTCHECK_AUTH_CREDS = credentials('smartcheck-auth')
           // }
-          script {
+          withCredentials([
+            credentialsId: 'smartcheck-auth',
+            usernameVariable: "SMARTCHECK_AUTH_CREDS_USR",
+            passwordVariable: "SMARTCHECK_AUTH_CREDS_PSW"
+          ]) { script {
             SMARTCHECK_AUTH_CREDS = credentials('smartcheck-auth')
             sh 'env'
             docker.image('mawinkler/scan-report').pull()
@@ -67,7 +71,7 @@ node('jenkins-jenkins-slave') {
               archiveArtifacts artifacts: 'report_*.pdf'
             }
             error('Issues in image found')
-          }
+          } }
         }
       }
     )
