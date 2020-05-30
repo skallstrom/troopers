@@ -19,7 +19,7 @@ node('jenkins-jenkins-slave') {
       "Check Image (pre-Registry)": {
         try {
           smartcheckScan([
-            imageName: "${REPOSITORY}:${BUILD_NUMBER}",
+            imageName: "${REPOSITORY}:${BUILD_NUMBER}REMOVE_ME",
             smartcheckHost: "${DSSC_SERVICE}",
             smartcheckCredentialsId: "smartcheck-auth",
             insecureSkipTLSVerify: true,
@@ -47,11 +47,23 @@ node('jenkins-jenkins-slave') {
             ]).toString(),
           ])
         } catch(e) {
+          environment {
+            SMARTCHECK_AUTH_CREDS = credentials('smartcheck-auth')
+          }
           script {
             sh 'env'
             docker.image('mawinkler/scan-report').pull()
             docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
-              sh 'python /usr/src/app/scan-report.py --config_path /usr/src/app --name "${REPOSITORY}" --image_tag "${BUILD_NUMBER}" --out_path "${WORKSPACE}"'
+              sh '''
+                python /usr/src/app/scan-report.py \
+                  --config_path /usr/src/app \
+                  --name "${REPOSITORY}" \
+                  --image_tag "${BUILD_NUMBER}" \
+                  --out_path "${WORKSPACE}" \
+                  --service "\\${DSSC_SERVICE}"
+                  --username "${SMARTCHECK_AUTH_CREDS_USR}" \
+                  --password "${SMARTCHECK_AUTH_CREDS_PSW}"
+              '''
               archiveArtifacts artifacts: 'report_*.pdf'
             }
             error('Issues in image found')
