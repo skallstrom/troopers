@@ -61,6 +61,8 @@ node('jenkins-jenkins-slave') {
             )
           ]) { script {
             sh 'env'
+            echo "${DSSC_SERVICE}"
+            echo '${DSSC_SERVICE}'
             docker.image('mawinkler/scan-report').pull()
             docker.image('mawinkler/scan-report').inside("--entrypoint=''") {
               sh '''
