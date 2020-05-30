@@ -57,12 +57,11 @@ node('jenkins-jenkins-slave') {
               sh '''
                 python /usr/src/app/scan-report.py \
                   --config_path /usr/src/app \
-                  --service "${DSSC_SERVICE}" \
-                  --username "${SMARTCHECK_AUTH_CREDS_USR}" \
-                  --password "${SMARTCHECK_AUTH_CREDS_PSW}" \
                   --name "${REPOSITORY}" \
                   --image_tag "${BUILD_NUMBER}" \
-                  --out_path "${WORKSPACE}"
+                  --out_path "${WORKSPACE}" \
+                  --username "${SMARTCHECK_AUTH_CREDS_USR}" \
+                  --password "${SMARTCHECK_AUTH_CREDS_PSW}"
               '''
               archiveArtifacts artifacts: 'report_*.pdf'
             }
