@@ -64,6 +64,7 @@ Parameters:
 
   SmartcheckHost:
     Type: String
+    Default: smartcheck-X-X-X-X.nip.io
     Description: Smartcheck host URL
     MinLength: 1
     MaxLength: 100
@@ -71,7 +72,7 @@ Parameters:
 
   SmartcheckUser:
     Type: String
-    Default: administrator
+    Default: admin
     Description: The user for Smartcheck
     MinLength: 1
     MaxLength: 100
@@ -86,6 +87,7 @@ Parameters:
 
   PreregistryHost:
     Type: String
+    Default: smartcheck-registry-X-X-X-X.nip.io
     Description: Smartcheck host URL
     MinLength: 1
     MaxLength: 100
@@ -93,6 +95,7 @@ Parameters:
 
   PreregistryUser:
     Type: String
+    Default: reguser
     Description: The user for Pre-Registry
     MinLength: 1
     MaxLength: 100
