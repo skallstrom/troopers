@@ -295,6 +295,18 @@ Resources:
             Value: !Ref EksClusterName
           - Name: EKS_KUBECTL_ROLE_ARN
             Value: !Sub arn:aws:iam::${AWS::AccountId}:role/${KubectlRoleName}
+          - Name: PRE_SCAN_REPOSITORY
+            Value: !Ref PreregistryHost
+          - Name: PRE_SCAN_USER
+            Value: !Ref PreregistryUser
+          - Name: PRE_SCAN_PWD
+            Value: !Ref PreregistryPwd
+          - Name: SMARTCHECK_HOST
+            Value: !Ref SmartcheckHost
+          - Name: SMARTCHECK_USER
+            Value: !Ref SmartcheckUser
+          - Name: SMARTCHECK_PWD
+            Value: !Ref SmartcheckPwd
       Name: !Ref AWS::StackName
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
 
