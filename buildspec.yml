@@ -8,6 +8,11 @@ phases:
       - chmod +x ./kubectl ./aws-iam-authenticator
       - export PATH=$PWD/:$PATH
       - apt-get update && apt-get -y install jq python3-pip python3-dev && pip3 install --upgrade awscli
+      # - apt-get update #&& apt-get -y install python3-pip && pip3 install --upgrade awscli
+      # - export PRE_SCAN_REPOSITORY_CLEAN=$(echo $PRE_SCAN_REPOSITORY | sed -e 's|^[^/]*//||' -e 's/[/:].*$//')
+      # - openssl s_client -showcerts -connect $PRE_SCAN_REPOSITORY_CLEAN:443 < /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > smcert.crt
+      # - cp smcert.crt /usr/local/share/ca-certificates/$PRE_SCAN_REPOSITORY.crt
+      # - update-ca-certificates
   pre_build:
       commands:
         - TAG="$REPOSITORY_NAME.$REPOSITORY_BRANCH.$ENVIRONMENT_NAME.$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
@@ -20,6 +25,19 @@ phases:
 
   post_build:
     commands:
+      - >-
+        docker run -v /var/run/docker.sock:/var/run/docker.sock
+        deepsecurity/smartcheck-scan-action
+        --image-name "$REPOSITORY_URL:$TAG"
+        --findings-threshold "{\"malware\":0,\"vulnerabilities\":{\"defcon1\":0,\"critical\":0,\"high\":1},\"contents\":{\"defcon1\":0,\"critical\":0,\"high\":1},\"checklists\":{\"defcon1\":0,\"critical\":0,\"high\":0}}"
+        --preregistry-host="$PRE_SCAN_REPOSITORY"
+        --smartcheck-host="$SMARTCHECK_HOST"
+        --smartcheck-user="$SMARTCHECK_USER"
+        --smartcheck-password="$SMARTCHECK_PWD"
+        --insecure-skip-tls-verify
+        --preregistry-scan
+        --preregistry-user "$PRE_SCAN_USER"
+        --preregistry-password "$PRE_SCAN_PWD"
       - docker push $REPOSITORY_URI:$TAG
       - CREDENTIALS=$(aws sts assume-role --role-arn $EKS_KUBECTL_ROLE_ARN --role-session-name codebuild-kubectl --duration-seconds 900)
       - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"

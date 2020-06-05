@@ -62,6 +62,49 @@ Parameters:
     MaxLength: 100
     ConstraintDescription: You must enter a kubectl IAM role
 
+  SmartcheckHost:
+    Type: String
+    Description: Smartcheck host URL
+    MinLength: 1
+    MaxLength: 100
+    ConstraintDescription: You must enter a Smartcheck host URL
+
+  SmartcheckUser:
+    Type: String
+    Default: administrator
+    Description: The user for Smartcheck
+    MinLength: 1
+    MaxLength: 100
+
+  SmartcheckPwd:
+    Type: String
+    NoEcho: true
+    Description: The password for Smartcheck user
+    MinLength: 1
+    MaxLength: 100
+    ConstraintDescription: You must enter a password for the Smartcheck user
+
+  PreregistryHost:
+    Type: String
+    Description: Smartcheck host URL
+    MinLength: 1
+    MaxLength: 100
+    ConstraintDescription: You must enter a Smartcheck host URL
+
+  PreregistryUser:
+    Type: String
+    Description: The user for Pre-Registry
+    MinLength: 1
+    MaxLength: 100
+    ConstraintDescription: You must enter a user for the Pre-Registry
+
+  PreregistryPwd:
+    Type: String
+    NoEcho: true
+    Description: The password for Pre-Registry user
+    MinLength: 1
+    MaxLength: 100
+    ConstraintDescription: You must enter a password for the Pre-Registry user
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -85,6 +128,15 @@ Metadata:
           default: EKS
         Parameters:
           - EksClusterName
+      - Label:
+          default: ImageSecurity
+        Parameters:
+          - SmartcheckHost
+          - SmartcheckUser
+          - SmartcheckPwd
+          - PreregistryHost
+          - PreregistryUser
+          - PreregistryPwd
     ParameterLabels:
       GitHubUser:
         default: Username
@@ -100,7 +152,18 @@ Metadata:
         default: kubectl IAM role
       EksClusterName:
         default: EKS cluster name
-
+      SmartcheckHost:
+        default: Smartcheck Host URL
+      SmartcheckUser:
+        default: Smartcheck User
+      SmartcheckPwd:
+        default: Smartcheck Password
+      PreregistryHost:
+        default: Pre-registry Host URL
+      PreregistryUser:
+        default: Pre-registry User
+      PreregistryPwd:
+        default: Pre-registry Password
 
 Resources:
 
